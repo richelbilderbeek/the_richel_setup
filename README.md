@@ -30,6 +30,8 @@ To get this setup to work, you'll need to have:
 
 The files are distributed over two projects as such:
 
+![The Richel setup](the_richel_setup.png)
+
 normal|testing
 ---|---
 the_richel_setup.pro|the_richel_setup_test.pro
