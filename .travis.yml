@@ -23,14 +23,16 @@ install:
   - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
 
 script: 
-  # Build test
+  # Build and run the tests
   - qmake the_richel_setup_test.pro
-  - make
-  # Build 'real' program
-  - qmake the_richel_setup.pro
-  - make
-  # Run tests
+  - make debug
   - ./the_richel_setup_test
+  # Build and run and profile normal program
+  - qmake the_richel_setup.pro
+  - make release
+  - time ./the_richel_setup
+  - gprof the_richel_setup > gprof.log
+  - head gprof.log -n 1000
   # Get code coverage
   - ./get_code_cov
   - codecov

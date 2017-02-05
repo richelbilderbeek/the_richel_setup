@@ -25,9 +25,22 @@
 
 ## Bird's eye view
 
+The files are distributed over two projects as such:
+
 normal|testing
 ---|---
-my_functions.h|my_functions.h
-my_functions.cpp|my_functions.h
+the_richel_setup.pro|the_richel_setup_test.pro
 main.cpp|main_test.cpp
  |my_functions_test.cpp
+my_functions.h|my_functions.h
+my_functions.cpp|my_functions.h
+
+The goal of this setup is to test and profile the functions in the `my_functions` unit (that is: `my_functions.h` and `my_functions.cpp`).
+
+The normal setup has one project file, `the_richel_setup.pro`. The `main` function of this project is in the file `main.cpp` (I prefer being unoriginal with naming).
+The functions to be *used* are in the `my_functions` unit. Even though the tests may fail, one can still use the functions. And it is this `main` function that is
+being profiled by `gprof`.
+
+The testing setup has one project file, `the_richel_setup_test.pro`. The `main` function of this project is in the file `main_test.cpp`.
+The functions to be *tested* are in the `my_functions` unit. The tests for the functions are in `my_functions_test.cpp`. 
+Boost.Test is used as a testing harness. If a test fails, other tests are still performed, even if `std::abort` is called! 
