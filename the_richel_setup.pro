@@ -24,17 +24,3 @@ CONFIG(release, debug|release) {
   QMAKE_CXXFLAGS += -pg
   QMAKE_LFLAGS += -pg
 }
-
-# In debug mode, turn on gcov and UBSAN
-CONFIG(debug, debug|release) {
-
-  # gcov
-  QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage
-  LIBS += -lgcov
-
-  # UBSAN
-  QMAKE_CXXFLAGS += -fsanitize=undefined
-  QMAKE_LFLAGS += -fsanitize=undefined
-  LIBS += -lubsan
-}
-

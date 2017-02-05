@@ -44,3 +44,82 @@ being profiled by `gprof`.
 The testing setup has one project file, `the_richel_setup_test.pro`. The `main` function of this project is in the file `main_test.cpp`.
 The functions to be *tested* are in the `my_functions` unit. The tests for the functions are in `my_functions_test.cpp`. 
 Boost.Test is used as a testing harness. If a test fails, other tests are still performed, even if `std::abort` is called! 
+
+## The normal run
+
+The normal run *uses* the functions in the `my_functions` unit.
+Because the tests are absent in this project, it can still be run when tests fail.
+The normal run is suited for profiling. Do not forget: profiling must be run in release mode.
+
+### `main.cpp`
+
+The `main` function just demonstrates some use of the functions in the `my_function` unit:
+
+```
+#include "my_functions.h"
+#include <iostream>
+
+int main()
+{
+  #ifndef NDEBUG
+  #error(one should not profile on debug mode)
+  #endif
+
+  std::cout << is_odd(42) << '\n';
+  std::cout << calc_mean( { 41.0, 42.0, 43.0 } ) << '\n';
+}
+```
+
+This run is suited for profiling. Profiling must be run in release mode, otherwise its results
+will be misleading. To be strict, running this project in debug mode is disallowed.
+
+### `the_richel_setup.pro`
+
+The `the_richel_setup.pro` files defines which files belong to
+the normal run project and how this should be compiled.
+
+```
+# Files
+SOURCES += main.cpp my_functions.cpp
+HEADERS += my_functions.h
+
+# C++14
+CONFIG += c++14
+QMAKE_CXX = g++-5
+QMAKE_LINK = g++-5
+QMAKE_CC = gcc-5
+QMAKE_CXXFLAGS += -std=c++14
+
+# High warnings levels
+QMAKE_CXXFLAGS += -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -Weffc++ -Werror
+
+# Allow debug and release mode
+CONFIG += debug_and_release
+
+# In release mode, turn on profiling
+CONFIG(release, debug|release) {
+
+  DEFINES += NDEBUG
+
+  # gprof
+  QMAKE_CXXFLAGS += -pg
+  QMAKE_LFLAGS += -pg
+}
+```
+
+This project consists out of three files: `main.cpp` and the `my_functions` unit. 
+Tests are absent in this build entirely. 
+
+C++14 is set to be the C++ standard used. The `QMAKE_[something] = [something]-5` are cumbersome, as one would prefer using just the defaults.
+This will hinder, for example, crosscompiling by MXE. On the other hand, this setup works on all computers *I* work with, including Travis CI.
+If the `-5`s need to be removed to compile, I suggest to just do it. Or create a modified copy.
+
+The warning levels are set to as high as possible: all GCC compiler warnings are enabled. And a warning cannot be ignored,
+as `-Werror` escalates a warning as an error.
+
+Then debug and release modes are both enabled. This may be unexpected: the `main` function will not compile in debug mode.
+
+I chose to do so, as I prefer to have broad `.pro` files, that I can copy-paste to other projects.
+
+
+
