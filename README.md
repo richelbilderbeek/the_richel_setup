@@ -19,9 +19,12 @@
  * code coverage is measured
  * style is checked by OCLint
 
-## History
+## Prerequisites
 
-`the_richel_setup` is an extension of [part of the Travis C++ tutorial](https://github.com/richelbilderbeek/travis_qmake_gcc_cpp14_boost_test_gcov_oclint).
+To get this setup to work, you'll need to have:
+
+ * A Travis CI account at www.travis.org and sign in. This can be done with your GitHub
+ * A Codecov account at www.codecov.io and sign in. This can be done with your GitHub
 
 ## Bird's eye view
 
@@ -118,8 +121,270 @@ The warning levels are set to as high as possible: all GCC compiler warnings are
 as `-Werror` escalates a warning as an error.
 
 Then debug and release modes are both enabled. This may be unexpected: the `main` function will not compile in debug mode.
+And that is exactly where is relied upon. 
 
-I chose to do so, as I prefer to have broad `.pro` files, that I can copy-paste to other projects.
+An idea would be to add:
+
+```
+# In debug mode, do not compile
+CONFIG(debug, debug|release) {
+  error(Must not compile a profiling run in debug mode)
+}
+```
+
+But, alas, that will not work. Instead, the `main` function is relied upon.
+
+In release mode, the `NDEBUG` flag is defined. This will compile the project in release mode. Among others,
+all `assert`s are removed from your code by the preprocessor. 
+
+Additionally, in release mode, the flags for profiling are enabled.
+
+## The test run
+
+The test run *tests* the functions in the `my_functions` unit.
+In testing, all diagnostics can be enabled
+
+### `main_test.cpp`
+
+The `main` function is created by Boost.Test. 
+
+```
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE my_functions_test_module
+#include <boost/test/unit_test.hpp>
+
+//No main needed, BOOST_TEST_DYN_LINK creates it
+```
+
+That is great: one does not need to worry to include all tests. Boost.Test will detect
+all test cases itself and run these.
+
+### `the_richel_setup_test.pro`
+
+The `the_richel_setup_test.pro` files defines which files belong to
+the test run project and how this should be compiled.
+
+```
+# Files
+HEADERS += my_functions.h
+SOURCES += my_functions.cpp \
+    main_test.cpp \
+    my_functions_test.cpp
+
+# C++14
+CONFIG += c++14
+QMAKE_CXX = g++-5
+QMAKE_LINK = g++-5
+QMAKE_CC = gcc-5
+QMAKE_CXXFLAGS += -std=c++14
+
+# High warnings levels
+QMAKE_CXXFLAGS += -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -Weffc++ -Werror
+
+# Allow debug and release mode
+CONFIG += debug_and_release
+
+# In release mode, turn on profiling
+CONFIG(release, debug|release) {
+
+  DEFINES += NDEBUG
+
+  # gprof
+  QMAKE_CXXFLAGS += -pg
+  QMAKE_LFLAGS += -pg
+}
+
+# In debug mode, turn on gcov and UBSAN
+CONFIG(debug, debug|release) {
+
+  # gcov
+  QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage
+  LIBS += -lgcov
+
+  # UBSAN
+  QMAKE_CXXFLAGS += -fsanitize=undefined
+  QMAKE_LFLAGS += -fsanitize=undefined
+  LIBS += -lubsan
+}
+
+# Boost.Test
+LIBS += -lboost_unit_test_framework
+```
+
+Next to the `my_functions` unit and the testing main, there is a `my_functions_test.cpp` file.
+This file contains all -how unexpected- tests.
+
+C++14 is used at the highest warnings level. Warnings are escalated to errors.
+
+Also this file allows for a debug and release mode. 
+
+The release mode allows for profiling the tests,
+so one can measure which functions are spent most time in during testing. Or to detect
+if there are some unused variables in release mode. Although this may be rare, I
+decide to keep it in. 
+
+The debug mode enables `gcov` and `UBSAN`. `gcov` allows for measuring code coverage,
+where `UBSAN` ('Undefined Behavior SANitizer') checks for undefined behavior. Testing
+will be slower due to this, be more thorough.
+
+Lastly, there is a linking to the Boost.Test library.
+
+### `my_functions_test.cpp`
+
+This is the file in which the functions are tested:
+
+```
+#include <boost/test/unit_test.hpp>
+
+#include "my_functions.h"
+
+BOOST_AUTO_TEST_CASE(test_is_odd)
+{
+  BOOST_CHECK(!is_odd(0));
+  BOOST_CHECK( is_odd(1));
+}
+
+BOOST_AUTO_TEST_CASE(test_calc_mean)
+{
+  const double measured{
+    calc_mean( {1.0, 2.0, 3.0} )
+  };
+  const double expected{2.0};
+  BOOST_CHECK_EQUAL(measured, expected);
+}
+
+BOOST_AUTO_TEST_CASE(test_calc_mean_needs_nonempty_vector)
+{
+  std::vector<double> empty;
+  BOOST_CHECK_THROW(
+    calc_mean(empty), 
+    std::invalid_argument
+  );
+}
+```
+
+There are three test cases, that can be recognized by `BOOST_AUTO_TEST_CASE` and their label. These labels
+are checked to be unique and should inform about the test.
+
+The first test case checks if `is_odd` returns false for a zero, and true for a one.
+
+The second test case checks if the mean of one, two and three is indeed two, as should be
+the result of the `calc_mean` function.
+
+The third test case checks if `calc_mean` throws an exception if it is given an empty vector.
+One cannot calculate the mean of zero values.
+
+## The `my_functions` unit
+
+The `my_functions` unit consists out of a header file
+called `my_functions.h` and an implementation file
+called `my_functions.cpp`.
+
+The functions therein are tested by the testing project and
+used by the normal run.
+
+### `my_functions.h`
+
+```
+#ifndef MY_FUNCTIONS_H
+#define MY_FUNCTIONS_H
+
+#include <vector>
+
+///Calculate the mean.
+///Will throw if the input is empty
+double calc_mean(const std::vector<double>& v);
+
+///Determine if a number is odd
+bool is_odd(const int i) noexcept;
+
+#endif // MY_FUNCTIONS_H
+```
+
+This header file starts, as is common, with an #include guard.
+
+The header file `vector` in #included and two functions are declared.
+
+The function `is_odd` is `noexcept`, which is a C++11 (and beyond) 
+syntax to designate that the function cannot, or will not, throw an exception.
+
+Both functions are documented. Three slashes are used, so that a
+document generation like Doxygen will interpret these comments
+as documentation.
+
+### `my_functions.cpp`
 
 
+```
+#include "my_functions.h"
 
+#include <numeric>
+#include <stdexcept>
+
+bool is_odd(const int i) noexcept
+{
+  return i % 2 != 0;
+}
+
+double calc_mean(const std::vector<double>& v)
+{
+  if (v.empty())
+  {
+    throw std::invalid_argument(
+      "cannot calculate the mean"
+      "of an empty vector"
+    );
+  }
+  const double sum{
+    std::accumulate(
+      std::begin(v),
+      std::end(v),
+      000'000.0 //seperators are new to C++14
+    )
+  };
+  return sum / static_cast<double>(v.size());
+}
+```
+
+This implementation file defines the two functions.
+
+The only noteworthy is that `calc_mean` uses
+seperators in the zero being used `000'000.0`.
+This is allowed since C++14, ensuring that this
+project uses C++14, else it does not compile
+
+## Use it for your own work
+
+Just clone/download this GitHub, put the
+code in a GitHub of your own and push.
+Get that green Travis build status first.
+
+Then start modifying the filename and
+replacing the example functions by
+functions of your own.
+
+It is easier to start from something that works, than
+to recreate it from scratch.
+
+Enjoy!
+
+## Extensions
+
+This setup has always been under construction. `the_richel_setup` started
+as [part of the Travis C++ tutorial](https://github.com/richelbilderbeek/travis_qmake_gcc_cpp14_boost_test_gcov_oclint).
+
+The addition of UBSAN is its newest addition. But I
+look forward to add `valgrind` to detect memory leaks,
+and to enforce a coding standard using `clang-format`.
+
+Feel invited to suggest these additions to me by 
+using an Issue or Pull Request.
+
+## Conclusion
+
+This is my personal favorite setup. Me and my friends
+use it as a starting point. And then, I've seen them
+grow: all that feedback from tools, that you get for
+free, forces you learning seasoned/correct C++.
+
+Enjoy!

@@ -24,3 +24,4 @@ CONFIG(release, debug|release) {
   QMAKE_CXXFLAGS += -pg
   QMAKE_LFLAGS += -pg
 }
+
