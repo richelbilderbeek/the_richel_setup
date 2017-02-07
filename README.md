@@ -19,6 +19,20 @@
  * code coverage is measured
  * style is checked by OCLint
 
+## Name of the setup
+
+I think 'the Richel setup' is a bad name. I prefer not to name things after myself.
+On the other hand, it *is* my personal setup. But the major reason for chosing
+this name, is that I lacked a better one. 
+
+Names I considered are:
+
+ * The dual-XOR setup, as `main`s must be exclusive to each project
+ * The FOE setup ('Figure Of Eigth'), after the figure of eight in the picture
+ * The infinity setup, after the figure of eight in the picture
+
+If you know a better one, please let me know, by posting an Issue.
+
 ## Prerequisites
 
 To get this setup to work, you'll need to have:
