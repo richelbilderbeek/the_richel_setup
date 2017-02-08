@@ -371,13 +371,83 @@ project uses C++14, else it does not compile
 
 ## Diagnostics
 
+This setup gives a lot of automatically generated goodies.
+
 ### Boost.Tests
+
+![Travis CI has run all Boost.Test tests](travis_boost_tests.png)
+
+On Travis CI, the testing project is executed and the results
+are shown. 
+
+In this case, all tests pass. Would at least one test
+fail, Travis CI will display a failed build.
 
 ### Profile
 
+![Travis CI has profiled the code](travis_gprof.png)
+
+On Travis CI, the normal project is profiled (using gprof) 
+and the results are shown. 
+
+In this case, the profile is uninformative: all 0.0 seconds
+took place in the `main` function. When the `main` function
+starts taking a longer time to run, an informative profile
+will be shown. 
+
+Below I show a profiling log that is informative:
+
+![Travis CI gives a more informative gprof log](travis_gprof_pbdmms.png)
+
+I show the profile for the top four functions. The top
+function, `ribi::count_species` has taken 27% of the complete
+runtime. It is followed closely by `ribi::get_genetic_distance` that
+took 26%. The two others took 9% and 6% of the
+complete runtime. Would there be a need to speed up the code, these
+are the functions that would be efficient to speed up.
+
 ### OCLint
 
+![Travis CI shows the output of the do_oclint script](travis_oclint.png)
+
+On Travis CI, the code of boths projects is tested by OCLint, via
+the script `do_oclint`.
+
+It can be seen that there is an ignore OCLint compiler warning
+and zero OCLint suggestions. 
+
+Below, I show an OCLint report that does have remarks:
+
+![Travis shows an OCLint report that does have remarks](travis_oclint_pbdmms.png)
+
+In this case, OCLint states that a variable name is disallowed to be
+more than twenty characters. The locations in the code are shown. 
+The Travis build will fail due to this.
+
 ### Codecov
+
+![Codecov shows the code coverage per file](code_coverage_files.png)
+
+Travis CI uses a tool called `gcov` and sends Codecov the code coverage.
+
+In this example project, both files have a 100% code coverage. This
+means that all lines in the functions are tested.
+
+Below, I will show a less perfect example:
+
+In this project, Codecov shows the code coverage of three files.
+The first file, `daic_helper.cpp` has a code coverage of 70%.
+The second file, `daic_input.cpp` does worse, with a code coverage
+of 50%. The third file `daic_input.h` does perfect again.
+
+![Codecov shows the code coverage per file for a less perfect project](code_coverage_files_pbdmms.png)
+
+Clicking on the file that has least code coverage, `daic_input.cpp`, we
+can see that there is a file that is untested, called `daic::save`. 
+
+![Codecov has spotted an untested function](code_coverage_daic_helper.png)
+
+Thanks to Codecov, we can see this void in our testing suite.
 
 ## Use it for your own work
 
