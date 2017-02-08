@@ -369,6 +369,16 @@ seperators in the zero being used `000'000.0`.
 This is allowed since C++14, ensuring that this
 project uses C++14, else it does not compile
 
+## Diagnostics
+
+### Boost.Tests
+
+### Profile
+
+### OCLint
+
+### Codecov
+
 ## Use it for your own work
 
 Just clone/download this GitHub, put the
