@@ -9,6 +9,36 @@
 
 `the_richel_setup` shows Richel Bilderbeek's favorite C++ setup.
 
+## Table of Content
+
+ * Goals
+ * Name of the setup
+ * Prerequisites
+ * Bird's eye view
+   * The normal run
+     * `main.cpp`
+     * `the_richel_setup.pro`
+   * The testing run
+     * `main_test.cpp`
+     * `the_richel_setup_test.pro`
+     * `my_functions_test.cpp`
+   * The `my_functions` unit
+     * `the_richel_setup.pri`
+     * `my_functions.h`
+     * `my_functions.cpp`
+ * Diagnostics
+   * Boost.Test
+   * Profile
+   * OCLint
+   * Codecov
+ * Use it for your own work
+ * Where do I put additions?
+   * I want to add a new function
+   * I want to add a new unit
+ * Extensions
+ * Conclusion
+ * Notes
+
 ## Goals
 
 `the_richel_setup` has:
@@ -68,14 +98,14 @@ The tests for the functions are in `my_functions_test.cpp`.
 Boost.Test is used as a testing harness. If a test fails, other tests are still performed, 
 even if `std::abort` is called (by, for example, `assert`).
 
-## The normal run
+### The normal run
 
 The normal run *uses* the functions in the `the_richel_setup.pri` project include file.
 Because the tests are absent in this project, it can still be run when tests fail.
 The normal run is suited for profiling. Profiling only gives sensible results in release mode,
 which is tested for in the `main` function.
 
-### `main.cpp`
+##### `main.cpp`
 
 The `main` function just demonstrates some use of the functions in the `my_function` unit:
 
@@ -104,7 +134,7 @@ int main()
 The demonstration of the functions of interested is very short. This is because of clarity only. In the
 end, this is the spot where to start your numerical calculations.
 
-### `the_richel_setup.pro`
+#### `the_richel_setup.pro`
 
 The `the_richel_setup.pro` files defines which files belong to
 the normal run project and how this should be compiled.
@@ -286,7 +316,7 @@ the result of the `calc_mean` function.
 The third test case checks if `calc_mean` throws an exception if it is given an empty vector.
 One cannot calculate the mean of zero values.
 
-## The `my_functions` unit
+### The `my_functions` unit
 
 The `my_functions` unit consists out of a header file
 called `my_functions.h` and an implementation file
@@ -295,7 +325,7 @@ called `my_functions.cpp`.
 The functions therein are tested by the testing project and
 used by the normal run.
 
-### `my_functions.h`
+#### `my_functions.h`
 
 ```
 #ifndef MY_FUNCTIONS_H
@@ -324,7 +354,7 @@ Both functions are documented. Three slashes are used, so that a
 document generation like Doxygen will interpret these comments
 as documentation.
 
-### `my_functions.cpp`
+#### `my_functions.cpp`
 
 
 ```
