@@ -46,29 +46,34 @@ The files are distributed over two projects as such:
 
 ![The Richel setup](the_richel_setup.png)
 
-normal|testing
----|---
-the_richel_setup.pro|the_richel_setup_test.pro
-main.cpp|main_test.cpp
- |my_functions_test.cpp
-my_functions.h|my_functions.h
-my_functions.cpp|my_functions.h
+This picture shows which files are part of which project.
+The files used by the normal run are in red, at the left.
+The files used by the testing run are in blue at the right.
+The files used by both setups are in the overlapping section.
+The most important file used by both setups is called `my_functions.pri`,
+which includes the `my_functions` unit (that is: `my_functions.h` and `my_functions.cpp`)
+to the project.
 
-The goal of this setup is to test and profile the functions in the `my_functions` unit (that is: `my_functions.h` and `my_functions.cpp`).
+The goal of this setup is to both test and profile the functions in `the_richel_project.pri` project
+include file.
 
 The normal setup has one project file, `the_richel_setup.pro`. The `main` function of this project is in the file `main.cpp` (I prefer being unoriginal with naming).
-The functions to be *used* are in the `my_functions` unit. Even though the tests may fail, one can still use the functions. And it is this `main` function that is
-being profiled by `gprof`.
+The functions to be *used* are in the `the_richel_setup.pri` project include file. 
+Even though the tests may fail, one can still use those functions. 
+And it is this `main` function that is being profiled by `gprof`.
 
-The testing setup has one project file, `the_richel_setup_test.pro`. The `main` function of this project is in the file `main_test.cpp`.
-The functions to be *tested* are in the `my_functions` unit. The tests for the functions are in `my_functions_test.cpp`. 
-Boost.Test is used as a testing harness. If a test fails, other tests are still performed, even if `std::abort` is called! 
+The testing setup has one project file, `the_richel_setup_test.pro`. The `main` function of this project is in 
+the file `main_test.cpp`. The functions to be *tested* are in the `the_richel_setup.pri` project include file. 
+The tests for the functions are in `my_functions_test.cpp`. 
+Boost.Test is used as a testing harness. If a test fails, other tests are still performed, 
+even if `std::abort` is called (by, for example, `assert`).
 
 ## The normal run
 
-The normal run *uses* the functions in the `my_functions` unit.
+The normal run *uses* the functions in the `the_richel_setup.pri` project include file.
 Because the tests are absent in this project, it can still be run when tests fail.
-The normal run is suited for profiling. Do not forget: profiling must be run in release mode.
+The normal run is suited for profiling. Profiling only gives sensible results in release mode,
+which is tested for in the `main` function.
 
 ### `main.cpp`
 
@@ -89,8 +94,15 @@ int main()
 }
 ```
 
-This run is suited for profiling. Profiling must be run in release mode, otherwise its results
-will be misleading. To be strict, running this project in debug mode is disallowed.
+`main.cpp` is part of `the_richel_setup.pro`, which encompasses the normal run. This file:
+
+ * `#include`s some header files
+ * tests that `NDEBUG` is `#defined`. `NDEBUG` will be `#defined` in release mode only. Being
+   in release mode is a prerequisite for profiling.  
+ * demonstrates the functions `is_odd` and `calc_mean`. These are the functions we are interested in
+
+The demonstration of the functions of interested is very short. This is because of clarity only. In the
+end, this is the spot where to start your numerical calculations.
 
 ### `the_richel_setup.pro`
 
@@ -99,8 +111,8 @@ the normal run project and how this should be compiled.
 
 ```
 # Files
-SOURCES += main.cpp my_functions.cpp
-HEADERS += my_functions.h
+include(the_richel_setup.pri)
+SOURCES += main.cpp
 
 # C++14
 CONFIG += c++14
@@ -137,18 +149,8 @@ The warning levels are set to as high as possible: all GCC compiler warnings are
 as `-Werror` escalates a warning as an error.
 
 Then debug and release modes are both enabled. This may be unexpected: the `main` function will not compile in debug mode.
-And that is exactly where is relied upon. 
+And that is exactly where is relied upon [NOTE 1]. 
 
-An idea would be to add:
-
-```
-# In debug mode, do not compile
-CONFIG(debug, debug|release) {
-  error(Must not compile a profiling run in debug mode)
-}
-```
-
-But, alas, that will not work. Instead, the `main` function is relied upon.
 
 In release mode, the `NDEBUG` flag is defined. This will compile the project in release mode. Among others,
 all `assert`s are removed from your code by the preprocessor. 
@@ -458,9 +460,79 @@ to recreate it from scratch.
 
 Enjoy!
 
+## Where do I put additions?
+
+### I want to add a new function
+
+ * Add the function declaration to `my_functions.h`
+ * Add the function definition to `my_functions.cpp`
+ * Add the function's tests to `my_functions_test.cpp`
+
+To give an example, suppose a function that determines if a number is
+even needs to be added. The function is called `is_even`.
+
+Add to `my_functions.h`:
+
+```
+bool is_even(const int x) noexcept;
+```
+
+Add to `my_functions.cpp`:
+
+```
+bool is_even(const int x) noexcept
+{
+  return !is_odd(x);
+}
+```
+
+Add to `my_functions_test.cpp`:
+
+```
+BOOST_AUTO_TEST_CASE(test_is_even)
+{
+  BOOST_CHECK( is_even(0));
+  BOOST_CHECK(!is_even(1));
+}
+```
+
+Note that the implementation and tests are also just examples.
+
+## I want to add a new unit
+
+ * Add the unit's header and implementation filename to `the_richel_setup.pri`
+ * Add the unit's test implementation filename to `the_richel_setup_test.pro`
+
+To give an example, suppose a class needs to be added to store odd numbers.
+
+The class:
+
+ * is called `odd_number`
+ * its declaration will be stored in `odd_number.h`
+ * its implementation will be put in `odd_number.cpp`
+ * will be tested in the file `odd_number_test.cpp`
+
+To add the `odd_number` unit to the setup, add to `the_richel_setup.pri`:
+
+```
+SOURCES += odd_number.cpp
+HEADERS += odd_number.h
+```
+
+The testing must be added to `the_richel_setup_test.pro`:
+
+```
+SOURCES += odd_number_test.cpp
+```
+
+With the files added to the correct project and project include files, the
+class `odd_number` can be developed similar as described in 'How do
+I add a new function?'.
+
 ## Extensions
 
-This setup has always been under construction. `the_richel_setup` started
+This setup has always been under construction, as I always look for
+diagnostic tools to add. `the_richel_setup` started
 as [part of the Travis C++ tutorial](https://github.com/richelbilderbeek/travis_qmake_gcc_cpp14_boost_test_gcov_oclint).
 
 The addition of UBSAN is its newest addition. But I
@@ -478,3 +550,18 @@ grow: all that feedback from tools, that you get for
 free, forces you learning seasoned/correct C++.
 
 Enjoy!
+
+## Notes
+
+### Note 1
+
+An idea would be to add:
+
+```
+# In debug mode, do not compile
+CONFIG(debug, debug|release) {
+  error(Must not compile a profiling run in debug mode)
+}
+```
+
+But, alas, that will not work. Instead, the `main` function is relied upon.
