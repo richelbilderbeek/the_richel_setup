@@ -81,7 +81,7 @@ The `main` function just demonstrates some use of the functions in the `my_funct
 int main()
 {
   #ifndef NDEBUG
-  #error(one should not profile on debug mode)
+  #error(one should not profile in debug mode)
   #endif
 
   std::cout << is_odd(42) << '\n';
@@ -162,18 +162,26 @@ In testing, all diagnostics can be enabled
 
 ### `main_test.cpp`
 
-The `main` function is created by Boost.Test. 
+Using Boost.Test has many advantages. One
+is that you do not need to write a `main` 
+function by hand: 
 
 ```
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE my_functions_test_module
 #include <boost/test/unit_test.hpp>
 
-//No main needed, BOOST_TEST_DYN_LINK creates it
+#ifdef NDEBUG
+#error(one should not test in release mode)
+#endif
 ```
 
 That is great: one does not need to worry to include all tests. Boost.Test will detect
 all test cases itself and run these.
+
+Next to this, there is a `#ifdef` that checks if the tests
+are run in debug mode. There is no reason to run tests
+in release mode.
 
 ### `the_richel_setup_test.pro`
 
@@ -182,10 +190,8 @@ the test run project and how this should be compiled.
 
 ```
 # Files
-HEADERS += my_functions.h
-SOURCES += my_functions.cpp \
-    main_test.cpp \
-    my_functions_test.cpp
+include(the_richel_setup.pri)
+SOURCES += main_test.cpp my_functions_test.cpp
 
 # C++14
 CONFIG += c++14
@@ -199,16 +205,6 @@ QMAKE_CXXFLAGS += -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -Weffc++ -
 
 # Allow debug and release mode
 CONFIG += debug_and_release
-
-# In release mode, turn on profiling
-CONFIG(release, debug|release) {
-
-  DEFINES += NDEBUG
-
-  # gprof
-  QMAKE_CXXFLAGS += -pg
-  QMAKE_LFLAGS += -pg
-}
 
 # In debug mode, turn on gcov and UBSAN
 CONFIG(debug, debug|release) {
@@ -227,17 +223,15 @@ CONFIG(debug, debug|release) {
 LIBS += -lboost_unit_test_framework
 ```
 
-Next to the `my_functions` unit and the testing main, there is a `my_functions_test.cpp` file.
+Next to the `my_functions` unit and the testing main, 
+there is a `my_functions_test.cpp` file.
 This file contains all -how unexpected- tests.
 
 C++14 is used at the highest warnings level. Warnings are escalated to errors.
 
-Also this file allows for a debug and release mode. 
-
-The release mode allows for profiling the tests,
-so one can measure which functions are spent most time in during testing. Or to detect
-if there are some unused variables in release mode. Although this may be rare, I
-decide to keep it in. 
+Also this file allows for a debug and release mode, but
+the `main_test.cpp` file will check that the project
+will be compiled in debug mode.
 
 The debug mode enables `gcov` and `UBSAN`. `gcov` allows for measuring code coverage,
 where `UBSAN` ('Undefined Behavior SANitizer') checks for undefined behavior. Testing

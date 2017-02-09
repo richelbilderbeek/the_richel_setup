@@ -1,8 +1,6 @@
 # Files
-HEADERS += my_functions.h
-SOURCES += my_functions.cpp \
-    main_test.cpp \
-    my_functions_test.cpp
+include(the_richel_setup.pri)
+SOURCES += main_test.cpp my_functions_test.cpp
 
 # C++14
 CONFIG += c++14
@@ -16,16 +14,6 @@ QMAKE_CXXFLAGS += -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -Weffc++ -
 
 # Allow debug and release mode
 CONFIG += debug_and_release
-
-# In release mode, turn on profiling
-CONFIG(release, debug|release) {
-
-  DEFINES += NDEBUG
-
-  # gprof
-  QMAKE_CXXFLAGS += -pg
-  QMAKE_LFLAGS += -pg
-}
 
 # In debug mode, turn on gcov and UBSAN
 CONFIG(debug, debug|release) {

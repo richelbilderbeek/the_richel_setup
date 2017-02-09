@@ -1,6 +1,6 @@
 # Files
-SOURCES += main.cpp my_functions.cpp
-HEADERS += my_functions.h
+include(the_richel_setup.pri)
+SOURCES += main.cpp
 
 # C++14
 CONFIG += c++14

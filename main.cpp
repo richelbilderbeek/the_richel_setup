@@ -4,7 +4,7 @@
 int main()
 {
   #ifndef NDEBUG
-  #error(one should not profile on debug mode)
+  #error(one should not profile in debug mode)
   #endif
   
   std::cout << is_odd(42) << '\n';
