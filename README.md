@@ -325,6 +325,28 @@ called `my_functions.cpp`.
 The functions therein are tested by the testing project and
 used by the normal run.
 
+#### `the_richel_setup.pri`
+
+The `the_richel_setup.pri` project include file 
+contains the filenames of the `my_functions`
+unit.
+
+```
+SOURCES += my_functions.cpp
+HEADERS += my_functions.h
+```
+
+This file is where it is determined which files
+are in both the normal and testing project.
+
+Would one like to add another, say, `my_helper`, these
+can be added here. This would then look like:
+
+```
+SOURCES += my_functions.cpp my_helper.cpp
+HEADERS += my_functions.h   my_helper.h
+```
+
 #### `my_functions.h`
 
 ```
