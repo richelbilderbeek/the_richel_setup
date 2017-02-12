@@ -595,3 +595,11 @@ CONFIG(debug, debug|release) {
 ```
 
 But, alas, that will not work. Instead, the `main` function is relied upon.
+
+## I want to contribute!
+
+See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Code of Conduct
+
+See [code_of_conduct.md](code_of_conduct.md)
