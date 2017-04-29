@@ -1,11 +1,8 @@
 # the_richel_setup
 
-[![Travis CI logo](TravisCI.png)](https://travis-ci.org)
-![Whitespace](Whitespace.png)
-[![Codecov logo](Codecov.png)](https://www.codecov.io)
-
-[![Build Status](https://travis-ci.org/richelbilderbeek/the_richel_setup.svg?branch=master)](https://travis-ci.org/richelbilderbeek/the_richel_setup)
-[![codecov.io](https://codecov.io/github/richelbilderbeek/the_richel_setup/coverage.svg?branch=master)](https://codecov.io/github/richelbilderbeek/the_richel_setup?branch=master)
+Branch|[![Travis CI logo](TravisCI.png)](https://travis-ci.org)|[![Codecov logo](Codecov.png)](https://www.codecov.io)
+---|---|---
+master|[![Build Status](https://travis-ci.org/richelbilderbeek/the_richel_setup.svg?branch=master)](https://travis-ci.org/richelbilderbeek/the_richel_setup)|[![codecov.io](https://codecov.io/github/richelbilderbeek/the_richel_setup/coverage.svg?branch=master)](https://codecov.io/github/richelbilderbeek/the_richel_setup/branch/master)
 
 `the_richel_setup` shows Richel Bilderbeek's favorite C++ setup.
 
@@ -445,7 +442,7 @@ will be shown.
 
 Below I show a profiling log that is informative:
 
-![Travis CI gives a more informative gprof log](travis_gprof_pbdmms.png)
+![Travis CI gives a more informative gprof log](travis_gprof_the_richel_setup.png)
 
 I show the profile for the top four functions. The top
 function, `ribi::count_species` has taken 27% of the complete
@@ -466,7 +463,7 @@ and zero OCLint suggestions.
 
 Below, I show an OCLint report that does have remarks:
 
-![Travis shows an OCLint report that does have remarks](travis_oclint_pbdmms.png)
+![Travis shows an OCLint report that does have remarks](travis_oclint_the_richel_setup.png)
 
 In this case, OCLint states that a variable name is disallowed to be
 more than twenty characters. The locations in the code are shown. 
@@ -488,7 +485,7 @@ The first file, `daic_helper.cpp` has a code coverage of 70%.
 The second file, `daic_input.cpp` does worse, with a code coverage
 of 50%. The third file `daic_input.h` does perfect again.
 
-![Codecov shows the code coverage per file for a less perfect project](code_coverage_files_pbdmms.png)
+![Codecov shows the code coverage per file for a less perfect project](code_coverage_files_the_richel_setup.png)
 
 Clicking on the file that has least code coverage, `daic_input.cpp`, we
 can see that there is a file that is untested, called `daic::save`. 
