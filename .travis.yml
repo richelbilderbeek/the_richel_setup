@@ -24,6 +24,8 @@ install:
   - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
   # valgrind, for helgrind and memcheck
   - sudo apt-get install -qq valgrind
+  # SLOCcount
+  - sudo apt-get install sloccount
 
 script: 
   # Build and run the tests
@@ -47,6 +49,8 @@ script:
   - codecov
   # Call OCLint
   - ./do_oclint
+  # SLOCcount
+  - cd ..; sloccount --overhead 1 --personcost 22614 the_richel_setup; cd the_richel_setup
 
 after_success:
   # Codecov
