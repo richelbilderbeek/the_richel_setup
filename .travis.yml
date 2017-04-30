@@ -21,12 +21,17 @@ install:
   - sudo apt-get install -qq g++-5
   # Codecov
   - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
+  # valgrind, for memcheck
+  - sudo apt-get install -qq valgrind
 
 script: 
   # Build and run the tests
   - qmake the_richel_setup_test.pro
   - make debug
   - ./the_richel_setup_test
+  # memcheck
+  - valgrind --leak-check=full -v --show-reachable=yes --log-file=memcheck.log ./the_richel_setup_test
+  - cat memcheck.log
   # Build and run and profile normal program
   - qmake the_richel_setup.pro
   - make release
