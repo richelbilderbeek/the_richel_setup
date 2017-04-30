@@ -144,9 +144,6 @@ SOURCES += main.cpp
 
 # C++14
 CONFIG += c++14
-QMAKE_CXX = g++-5
-QMAKE_LINK = g++-5
-QMAKE_CC = gcc-5
 QMAKE_CXXFLAGS += -std=c++14
 
 # High warnings levels
@@ -169,9 +166,7 @@ CONFIG(release, debug|release) {
 This project consists out of three files: `main.cpp` and the `my_functions` unit. 
 Tests are absent in this build entirely. 
 
-C++14 is set to be the C++ standard used. The `QMAKE_[something] = [something]-5` are cumbersome, as one would prefer using just the defaults.
-This will hinder, for example, crosscompiling by MXE. On the other hand, this setup works on all computers *I* work with, including Travis CI.
-If the `-5`s need to be removed to compile, I suggest to just do it. Or create a modified copy.
+C++14 is set to be the C++ standard used.
 
 The warning levels are set to as high as possible: all GCC compiler warnings are enabled. And a warning cannot be ignored,
 as `-Werror` escalates a warning as an error.
@@ -225,9 +220,6 @@ SOURCES += main_test.cpp my_functions_test.cpp
 
 # C++14
 CONFIG += c++14
-QMAKE_CXX = g++-5
-QMAKE_LINK = g++-5
-QMAKE_CC = gcc-5
 QMAKE_CXXFLAGS += -std=c++14
 
 # High warnings levels
@@ -428,6 +420,14 @@ are shown.
 
 In this case, all tests pass. Would at least one test
 fail, Travis CI will display a failed build.
+
+### `helgrind`
+
+`helgrind` can be used to detect thread errors (for example, race conditions).
+
+### `memcheck`
+
+`memcheck` can be used to detect memory leaks
 
 ### Profile
 
