@@ -22,7 +22,7 @@ install:
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
   # Codecov
   - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
-  # valgrind, for memcheck
+  # valgrind, for helgrind and memcheck
   - sudo apt-get install -qq valgrind
 
 script: 
@@ -30,6 +30,9 @@ script:
   - qmake the_richel_setup_test.pro
   - make debug
   - ./the_richel_setup_test
+  # helgrind
+  - valgrind --tool=helgrind --log-file=helgrind.log -v ./the_richel_setup_test
+  - cat helgrind.log
   # memcheck
   - valgrind --leak-check=full -v --show-reachable=yes --log-file=memcheck.log ./the_richel_setup_test
   - cat memcheck.log

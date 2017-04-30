@@ -19,7 +19,7 @@ CONFIG(debug, debug|release) {
   QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage
   LIBS += -lgcov
 
-  # helgrind, for memcheck
+  # helgrind, for helgrind and memcheck
   QMAKE_LFLAGS += -pthread -Wl,--no-as-needed
   
   # UBSAN
