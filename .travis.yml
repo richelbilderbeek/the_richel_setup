@@ -49,8 +49,10 @@ script:
   - codecov
   # Call OCLint
   - ./do_oclint
+  # Get my folder
+  - my_github=${PWD##*/}  
   # SLOCcount
-  - cd ..; sloccount --overhead 1 --personcost 22614 the_richel_setup; cd the_richel_setup
+  - cd ..; sloccount --overhead 1 --personcost 22614 $my_github; cd $my_github
 
 after_success:
   # Codecov
