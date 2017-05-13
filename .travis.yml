@@ -26,6 +26,8 @@ install:
   - sudo apt-get install -qq valgrind
   # SLOCcount
   - sudo apt-get install sloccount
+  # proselint
+  - sudo pip install proselint
 
 script: 
   # Build and run the tests
@@ -53,6 +55,9 @@ script:
   - my_github=${PWD##*/}  
   # SLOCcount
   - cd ..; sloccount --overhead 1 --personcost 22614 $my_github; cd $my_github
+  # proselint
+  - sed -i 's/!\[/\[/' README.md
+  - proselint README.md
 
 after_success:
   # Codecov

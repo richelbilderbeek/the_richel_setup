@@ -29,6 +29,7 @@ develop|[![Build Status](https://travis-ci.org/richelbilderbeek/the_richel_setup
    * Profile
    * OCLint
    * Codecov
+   * proselint
  * Use it for your own work
  * Where do I put additions?
    * I want to add a new function
@@ -68,7 +69,7 @@ To get this setup to work, you'll need to have:
  * A Travis CI account at www.travis.org and sign in. This can be done with your GitHub
  * A Codecov account at www.codecov.io and sign in. This can be done with your GitHub
 
-## Bird's eye view
+## Overview
 
 The files are distributed over two projects as such:
 
@@ -129,7 +130,7 @@ int main()
    in release mode is a prerequisite for profiling.  
  * demonstrates the functions `is_odd` and `calc_mean`. These are the functions we are interested in
 
-The demonstration of the functions of interested is very short. This is because of clarity only. In the
+The demonstration of the functions of interested is short. This is because of clarity only. In the
 end, this is the spot where to start your numerical calculations.
 
 #### `the_richel_setup.pro`
@@ -479,14 +480,14 @@ Travis CI uses a tool called `gcov` and sends Codecov the code coverage.
 In this example project, both files have a 100% code coverage. This
 means that all lines in the functions are tested.
 
-Below, I will show a less perfect example:
+Below, I will show an example with incomplete code coverage:
 
 In this project, Codecov shows the code coverage of three files.
 The first file, `daic_helper.cpp` has a code coverage of 70%.
 The second file, `daic_input.cpp` does worse, with a code coverage
 of 50%. The third file `daic_input.h` does perfect again.
 
-![Codecov shows the code coverage per file for a less perfect project](code_coverage_files_the_richel_setup.png)
+![Codecov shows the code coverage per file for a project with incomplete code coverage](code_coverage_files_the_richel_setup.png)
 
 Clicking on the file that has least code coverage, `daic_input.cpp`, we
 can see that there is a file that is untested, called `daic::save`. 
@@ -494,6 +495,22 @@ can see that there is a file that is untested, called `daic::save`.
 ![Codecov has spotted an untested function](code_coverage_daic_helper.png)
 
 Thanks to Codecov, we can see this void in our testing suite.
+
+## proselint
+
+This `README.md` file is checked by `proselint`. `proselint` checks prose for style.
+
+When adding `proselint` to this project, these errors were given:
+
+```
+README.md:15:4: cliches.write_good 'Bird's eye view' is a cliché.
+README.md:71:4: cliches.write_good 'Bird's eye view' is a cliché.
+README.md:132:53: weasel_words.very Substitute 'damn' every time you're inclined to write 'very;' your editor will delete it and the writing will be just as it should be.
+README.md:482:22: uncomparables.misc Comparison of an uncomparable: 'less perfect ' is not comparable.
+README.md:489:50: uncomparables.misc Comparison of an uncomparable: 'less perfect ' is not comparable.
+README.md:511:6: leonard.exclamation.30ppm More than 30 ppm of exclamations. Keep them under control.
+README.md:615:4: misc.but No paragraph should start with a 'But'.
+```
 
 ## Use it for your own work
 
@@ -509,6 +526,7 @@ It is easier to start from something that works, than
 to recreate it from scratch.
 
 Enjoy!
+
 
 ## Where do I put additions?
 
@@ -614,9 +632,9 @@ CONFIG(debug, debug|release) {
 }
 ```
 
-But, alas, that will not work. Instead, the `main` function is relied upon.
+Alas, that will not work. Instead, the `main` function is relied upon.
 
-## I want to contribute!
+## I want to contribute
 
 See [CONTRIBUTING.md](CONTRIBUTING.md)
 
