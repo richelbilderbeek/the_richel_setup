@@ -56,11 +56,13 @@ script:
   # SLOCcount
   - cd ..; sloccount --overhead 1 --personcost 22614 $my_github; cd $my_github
   # proselint
-  - sed -i 's/!\[/\[/g' README.md
+  - sed -i 's/\!\[/\[/g' README.md
   - sed -i "s/Bird's eye view/Overview/" README.md
   - sed -i "s/bird's eye view/overview/" README.md
-  - sed -i 's/ very / /' README.md
-  - sed -i 's/ Very / /' README.md
+  - sed -i 's/ very / /g' README.md
+  - sed -i 's/ Very / /g' README.md
+  - sed -i 's/ damn / /g' README.md
+  - sed -i 's/ Damn / /g' README.md
   - sed -i 's/less perfect/perfect/' README.md
   - cat -n README.md
   - proselint README.md
