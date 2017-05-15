@@ -59,6 +59,7 @@ script:
   - sed -i 's/\!\[/\[/g' README.md
   - sed -i 's/return \!/return /g' README.md
   - sed -i 's/BOOST_CHECK(\!/BOOST_CHECK( /g' README.md
+  - sed -i 's/ \!= / == /g' README.md
   - sed -i "s/Bird's eye view/Overview/" README.md
   - sed -i "s/bird's eye view/overview/" README.md
   - sed -i "s/'damn'/ /g" README.md

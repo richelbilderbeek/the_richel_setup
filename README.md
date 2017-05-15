@@ -619,8 +619,6 @@ use it as a starting point. And then, I've seen them
 grow: all that feedback from tools, that you get for
 free, forces you learning seasoned/correct C++.
 
-Enjoy!
-
 ## Notes
 
 ### Note 1
