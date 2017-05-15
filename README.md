@@ -51,7 +51,7 @@ develop|[![Build Status](https://travis-ci.org/richelbilderbeek/the_richel_setup
 ## Name of the setup
 
 I think 'the Richel setup' is a bad name. I prefer not to name things after myself.
-On the other hand, it *is* my personal setup. But the major reason for chosing
+On the other hand, it *is* my personal setup. The major reason for chosing
 this name, is that I lacked a better one. 
 
 Names I considered are:
@@ -511,6 +511,8 @@ README.md:489:50: uncomparables.misc Comparison of an uncomparable: 'less perfec
 README.md:511:6: leonard.exclamation.30ppm More than 30 ppm of exclamations. Keep them under control.
 README.md:615:4: misc.but No paragraph should start with a 'But'.
 ```
+
+Because I here show these errors, the `.travis.yml` file has to remove these error from this document.
 
 ## Use it for your own work
 
