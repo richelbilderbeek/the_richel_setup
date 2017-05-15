@@ -62,7 +62,7 @@ script:
   - sed -i 's/ very / /' README.md
   - sed -i 's/ Very / /' README.md
   - sed -i 's/less perfect/perfect/' README.md
-  - cat README.md
+  - cat -n README.md
   - proselint README.md
 
 after_success:
