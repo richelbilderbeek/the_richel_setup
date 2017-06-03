@@ -426,9 +426,13 @@ fail, Travis CI will display a failed build.
 
 `helgrind` can be used to detect thread errors (for example, race conditions).
 
+![helgrind's output](helgrind.png)
+
 ### `memcheck`
 
-`memcheck` can be used to detect memory leaks
+`memcheck` can be used to detect memory leaks.
+
+![memcheck's output](memcheck.png)
 
 ### Profile
 
