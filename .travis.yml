@@ -22,6 +22,8 @@ install:
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
   # Codecov
   - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
+  # cppcheck
+  - sudo apt-get install -qq cppcheck
   # valgrind, for helgrind and memcheck
   - sudo apt-get install -qq valgrind
   # SLOCcount
@@ -49,6 +51,8 @@ script:
   # Get code coverage
   - ./get_code_cov
   - codecov
+  # cppcheck
+  - cppcheck --quiet . 
   # Call OCLint
   - ./do_oclint
   # Get my folder
