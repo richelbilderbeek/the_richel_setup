@@ -1,6 +1,12 @@
 #include "my_functions.h"
 #include <iostream>
 
+//C++14
+auto f() noexcept 
+{
+  return "Hello world\n";
+}
+
 int main()
 {
   #ifndef NDEBUG

@@ -22,7 +22,7 @@ double calc_mean(const std::vector<double>& v)
     std::accumulate(
       std::begin(v),
       std::end(v),
-      000'000.0 //seperators are new to C++14
+      0.0
     )
   };
   return sum / static_cast<double>(v.size());
