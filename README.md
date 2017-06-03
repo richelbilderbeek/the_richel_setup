@@ -12,7 +12,7 @@ develop|[![Build Status](https://travis-ci.org/richelbilderbeek/the_richel_setup
  * Goals
  * Name of the setup
  * Prerequisites
- * Bird's eye view
+ * Overview
    * The normal run
      * `main.cpp`
      * `the_richel_setup.pro`
@@ -508,7 +508,7 @@ When adding `proselint` to this project, these errors were given:
 
 ![proselint](proselint.png)
 
-Because I here show these errors, the `.travis.yml` file has to remove these error from this document.
+I put these errors here as a picture, else `proselint` will complain.
 
 ## Use it for your own work
 
