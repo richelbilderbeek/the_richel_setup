@@ -52,7 +52,7 @@ script:
   - ./get_code_cov
   - codecov
   # cppcheck
-  - cppcheck --quiet . 
+  - cppcheck --quiet --error-exitcode=1 . 
   # Call OCLint
   - ./do_oclint
   # Get my folder
