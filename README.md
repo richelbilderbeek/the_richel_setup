@@ -506,15 +506,7 @@ This `README.md` file is checked by `proselint`. `proselint` checks prose for st
 
 When adding `proselint` to this project, these errors were given:
 
-```
-README.md:15:4: cliches.write_good 'Bird's eye view' is a cliché.
-README.md:71:4: cliches.write_good 'Bird's eye view' is a cliché.
-README.md:132:53: weasel_words.very Substitute 'damn' every time you're inclined to write 'very;' your editor will delete it and the writing will be just as it should be.
-README.md:482:22: uncomparables.misc Comparison of an uncomparable: 'less perfect ' is not comparable.
-README.md:489:50: uncomparables.misc Comparison of an uncomparable: 'less perfect ' is not comparable.
-README.md:511:6: leonard.exclamation.30ppm More than 30 ppm of exclamations. Keep them under control.
-README.md:615:4: misc.but No paragraph should start with a 'But'.
-```
+![proselint](proselint.png)
 
 Because I here show these errors, the `.travis.yml` file has to remove these error from this document.
 
