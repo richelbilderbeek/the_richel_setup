@@ -27,6 +27,9 @@ develop|[![Build Status](https://travis-ci.org/richelbilderbeek/the_richel_setup
  * Diagnostics
    * Boost.Test
    * Profile
+   * `cppcheck`
+   * `helgrind`
+   * `valgrind`
    * OCLint
    * Codecov
    * proselint
@@ -421,6 +424,10 @@ are shown.
 
 In this case, all tests pass. Would at least one test
 fail, Travis CI will display a failed build.
+
+### `cppcheck`
+
+`cppcheck` is a static code analyser.
 
 ### `helgrind`
 
