@@ -57,6 +57,9 @@ I think 'the Richel setup' is a bad name. I prefer not to name things after myse
 On the other hand, it *is* my personal setup. The major reason for chosing
 this name, is that I lacked a better one. 
 
+*Update*: At the moment I consider calling it 'The Good Boy' setup, as it tries
+to follow all Good Practices.
+
 Names I considered are:
 
  * The dual-XOR setup, as `main`s must be exclusive to each project
