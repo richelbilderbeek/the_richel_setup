@@ -622,6 +622,8 @@ use it as a starting point. And then, I've seen them
 grow: all that feedback from tools, that you get for
 free, forces you learning seasoned/correct C++.
 
+A lighter version is used in [my Correct C++ course](https://github.com/richelbilderbeek/correct_cpp).
+
 ## Notes
 
 ### Note 1
