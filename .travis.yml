@@ -1,29 +1,23 @@
 language: cpp
-compiler: gcc
-dist: trusty
+dist: xenial
+compiler:
+  - gcc
+  # - clang 
 
-# Boost
 addons: 
   apt: 
-    packages: libboost-all-dev
+    packages: 
+      - libboost-all-dev
 
-before_install:
-  # C++14
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  - sudo apt-get update -qq
+install: 
+  # Qt5
+  - sudo apt-get install -qq qt5-qmake qt5-default
+  # cppcheck
+  - sudo apt-get install -qq cppcheck
   # Codecov
   - sudo pip install codecov
   # OCLint
   - ./install_oclint
-
-install: 
-  # C++14
-  - sudo apt-get install -qq g++-5
-  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
-  # Codecov
-  - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
-  # cppcheck
-  - sudo apt-get install -qq cppcheck
   # valgrind, for helgrind and memcheck
   - sudo apt-get install -qq valgrind
   # SLOCcount
@@ -34,7 +28,7 @@ install:
 script: 
   # Build and run the tests
   - qmake the_richel_setup_test.pro
-  - make debug
+  - make --silent debug
   - ./the_richel_setup_test
   # helgrind
   - valgrind --tool=helgrind --log-file=helgrind.log -v ./the_richel_setup_test
@@ -44,7 +38,7 @@ script:
   - cat memcheck.log
   # Build and run and profile normal program
   - qmake the_richel_setup.pro
-  - make release
+  - make --silent release
   - time ./the_richel_setup
   - gprof the_richel_setup > gprof.log
   - head gprof.log -n 1000
@@ -55,12 +49,17 @@ script:
   - cppcheck --quiet --error-exitcode=1 . 
   # Call OCLint
   - ./do_oclint
+  # proselint
+  - proselint README.md
   # Get my folder
   - my_github=${PWD##*/}  
   # SLOCcount
+  #   remove OCLint and .git, otherwise it will be counted as well
+  - rm -rf oclint-0.10.3 oclint-0.10.3-x86_64-linux-3.13.0-74-generic.tar.gz oclint.log
+  - rm -rf .git
+  - rm -rf debug
+  - rm -rf release
   - cd ..; sloccount --overhead 1 --personcost 22614 $my_github; cd $my_github
-  # proselint
-  - proselint README.md
 
 after_success:
   # Codecov
