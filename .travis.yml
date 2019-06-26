@@ -24,6 +24,10 @@ install:
   - sudo apt-get install sloccount
   # proselint
   - sudo pip install proselint
+  # Check dead links
+  - sudo apt-get install -qq npm
+  - npm config set strict-ssl false
+  - sudo npm install -g markdown-link-check
 
 script: 
   # Build and run the tests
@@ -53,6 +57,10 @@ script:
   - proselint README.md
   # Get my folder
   - my_github=${PWD##*/}  
+  # Check dead links
+  - sudo apt-get install -qq npm
+  - npm config set strict-ssl false
+  - sudo npm install -g markdown-link-check
   # SLOCcount
   #   remove OCLint and .git, otherwise it will be counted as well
   - rm -rf oclint-0.10.3 oclint-0.10.3-x86_64-linux-3.13.0-74-generic.tar.gz oclint.log
