@@ -1,9 +1,9 @@
 # the_richel_setup
 
-Branch|[![Travis CI logo](TravisCI.png)](https://travis-ci.org)|[![Codecov logo](Codecov.png)](https://www.codecov.io)
+Branch|[![Travis CI logo](TravisCI.png)](https://travis-ci.com)|[![Codecov logo](Codecov.png)](https://www.codecov.io)
 ---|---|---
-master|[![Build Status](https://travis-ci.org/richelbilderbeek/the_richel_setup.svg?branch=master)](https://travis-ci.org/richelbilderbeek/the_richel_setup)|[![codecov.io](https://codecov.io/github/richelbilderbeek/the_richel_setup/coverage.svg?branch=master)](https://codecov.io/github/richelbilderbeek/the_richel_setup/branch/master)
-develop|[![Build Status](https://travis-ci.org/richelbilderbeek/the_richel_setup.svg?branch=develop)](https://travis-ci.org/richelbilderbeek/the_richel_setup)|[![codecov.io](https://codecov.io/github/richelbilderbeek/the_richel_setup/coverage.svg?branch=develop)](https://codecov.io/github/richelbilderbeek/the_richel_setup/branch/develop)
+master|[![Build Status](https://travis-ci.com/richelbilderbeek/the_richel_setup.svg?branch=master)](https://travis-ci.com/richelbilderbeek/the_richel_setup)|[![codecov.io](https://codecov.io/github/richelbilderbeek/the_richel_setup/coverage.svg?branch=master)](https://codecov.io/github/richelbilderbeek/the_richel_setup/branch/master)
+develop|[![Build Status](https://travis-ci.com/richelbilderbeek/the_richel_setup.svg?branch=develop)](https://travis-ci.com/richelbilderbeek/the_richel_setup)|[![codecov.io](https://codecov.io/github/richelbilderbeek/the_richel_setup/coverage.svg?branch=develop)](https://codecov.io/github/richelbilderbeek/the_richel_setup/branch/develop)
 
 `the_richel_setup` shows Richel Bilderbeek's favorite C++ setup.
 
